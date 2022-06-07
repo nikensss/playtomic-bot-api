@@ -1,5 +1,12 @@
 import { clsProxify } from 'cls-proxify';
 import pino, { stdSerializers } from 'pino';
 
-export const logger = pino({ level: 'info', serializers: { err: stdSerializers.err } });
+const isDev = process.env.NODE_ENV === 'development';
+const prettyLogs = { transport: { target: 'pino-pretty', options: { colorize: true } } };
+
+export const logger = pino({
+  level: 'info',
+  serializers: { err: stdSerializers.err },
+  ...(isDev ? prettyLogs : {}),
+});
 export const log = clsProxify(logger);
