@@ -27,7 +27,7 @@ async function bootstrap(): Promise<void> {
 
 const retry = (): void => {
   bootstrap().catch(ex => {
-    console.error(ex);
+    logger.error({ err: ex });
     retry();
   });
 };
