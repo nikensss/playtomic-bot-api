@@ -25,10 +25,12 @@
   },
   "dependencies": {
     "@nestjs/common": "8.0.0",
+    "@nestjs/config": "2.1.0",
     "@nestjs/core": "8.0.7",
     "@nestjs/platform-fastify": "8.4.6",
     "cls-proxify": "2.0.0",
     "dotenv": "16.0.1",
+    "joi": "17.6.0",
     "newrelic": "8.14.0",
     "pino": "8.0.0",
     "pino-pretty": "8.0.0",
