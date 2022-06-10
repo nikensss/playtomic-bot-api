@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PinoLoggerService } from './pino-logger/pino-logger.service';
+import { PinoLoggerService } from './pino-logger-module/pino-logger/pino-logger.service';
 
 @Injectable()
 export class AppService {
