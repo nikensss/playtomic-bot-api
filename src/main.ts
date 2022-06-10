@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { clsProxifyFastifyPlugin } from 'cls-proxify/integration/fastify';
 import { v4 as uuid } from 'uuid';
-import { PinoLoggerService } from './pino-logger-module/pino-logger/pino-logger.service';
-import { logger } from './pino-logger-module/pino-logger/pino-logger-cls';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AppModule } from './app/app.module';
+import { PinoLoggerService } from './pino-logger/pino-logger.service';
+import { logger } from './pino-logger/pino-logger-cls';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(

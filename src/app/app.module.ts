@@ -1,10 +1,10 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { PinoLoggerModuleModule } from 'src/pino-logger/pino-logger-module.module';
+import { PinoLoggerService } from 'src/pino-logger/pino-logger.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PinoLoggerModuleModule } from './pino-logger-module/pino-logger-module.module';
-import { PinoLoggerService } from './pino-logger-module/pino-logger/pino-logger.service';
 
 @Module({
   imports: [
