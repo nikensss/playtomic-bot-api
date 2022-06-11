@@ -7,12 +7,12 @@ import { log } from 'src/pino-logger/pino-logger-cls';
 export class RequestLoggerMiddleware implements NestMiddleware {
   use(req: FastifyRequest, reply: Response, next: () => void): void {
     const start = Date.now();
-    const { id, method, url } = req;
+    const { id: reqId, method, url } = req;
 
-    log.info({ reqId: id, method, url }, 'request received');
+    log.info({ reqId, method, url }, 'request received');
     reply.on('finish', () => {
-      const responseTime = Date.now() - start;
-      log.info({ reqId: id, method, url, responseTime }, 'request completed');
+      const ms = Date.now() - start;
+      log.info({ reqId, method, url, ms }, 'request completed');
     });
 
     next();

@@ -5,7 +5,7 @@ import { PinoLoggerModuleModule } from 'src/pino-logger/pino-logger-module.modul
 import { PinoLoggerService } from 'src/pino-logger/pino-logger.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { RequestLoggerMiddleware } from './request-logger.middleware';
+import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
 
 @Module({
   imports: [
