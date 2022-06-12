@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { PinoLoggerService } from './pino-logger/pino-logger.service';
 import { logger } from './pino-logger/pino-logger-cls';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -18,6 +19,7 @@ async function bootstrap(): Promise<void> {
       logger: new PinoLoggerService(),
     },
   );
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   await app.register(clsProxifyFastifyPlugin, {
     proxify: ({ id, url }) => logger.child({ reqId: id, url }),
