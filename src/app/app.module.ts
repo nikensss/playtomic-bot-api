@@ -1,16 +1,16 @@
-import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { PinoLoggerModuleModule } from 'src/pino-logger/pino-logger-module.module';
-import { PinoLoggerService } from 'src/pino-logger/pino-logger.service';
+import { PinoLoggerModule } from 'src/pino-logger/pino-logger.module';
+import { PrismaModule } from 'src/prisma/prisma.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
 
 @Module({
   imports: [
-    PinoLoggerModuleModule,
     ConfigModule.forRoot({
+      isGlobal: true,
       cache: true,
       validationSchema: Joi.object({
         NEW_RELIC_APPLICATION_LOGGING_FORWARDING_ENABLED: Joi.boolean().valid(true),
@@ -21,9 +21,11 @@ import { RequestLoggerMiddleware } from './middleware/request-logger.middleware'
         NEW_RELIC_LICENSE_KEY: Joi.string().not(''),
       }),
     }),
+    PinoLoggerModule,
+    PrismaModule,
   ],
   controllers: [AppController],
-  providers: [AppService, Logger, PinoLoggerService],
+  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {

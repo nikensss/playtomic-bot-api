@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRED_DB: pg_db
+      POSTGRES_DB: pg_db
     networks:
       - nestapp
 networks:

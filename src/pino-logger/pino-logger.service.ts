@@ -1,12 +1,12 @@
-import { Injectable, LoggerService, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Logger } from 'pino';
 import { log } from './pino-logger-cls';
 
 export type ClassInstance = { constructor: { name: string } };
 
-@Injectable({ scope: Scope.TRANSIENT })
-export class PinoLoggerService implements LoggerService {
-  private context = '';
+@Injectable()
+export class PinoLoggerService {
+  private context: string | undefined;
 
   private get logger(): Logger {
     return log.child({ context: this.context });
