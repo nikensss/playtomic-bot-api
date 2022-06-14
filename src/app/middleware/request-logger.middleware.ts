@@ -12,7 +12,7 @@ export class RequestLoggerMiddleware implements NestMiddleware {
     log.info({ reqId, method, url }, 'request received');
     reply.on('finish', () => {
       const ms = Date.now() - start;
-      log.info({ reqId, method, url, ms }, 'request completed');
+      log.info({ reqId, method, url, ms, status: reply.statusCode }, 'request completed');
     });
 
     next();
