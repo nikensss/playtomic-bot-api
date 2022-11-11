@@ -2,8 +2,8 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AuthModule } from 'src/auth/auth.module';
+import { DbModule } from 'src/db/db.module';
 import { LoggerModule } from 'src/logger/logger.module';
-import { PrismaModule } from 'src/prisma/prisma.module';
 import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
 
 @Module({
@@ -23,7 +23,7 @@ import { RequestLoggerMiddleware } from './middleware/request-logger.middleware'
       }),
     }),
     LoggerModule,
-    PrismaModule,
+    DbModule,
     AuthModule,
   ],
 })
