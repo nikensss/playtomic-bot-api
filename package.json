@@ -17,10 +17,10 @@
     "prebuild": "rimraf dist",
     "prepare": "husky install",
     "prettier": "prettier \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start -e \"ts-node -r dotenv/config -r newrelic\"",
-    "start:debug": "nest start --debug --watch -e \"ts-node -r dotenv/config -r newrelic\"",
-    "start:dev": "nest start --watch -e \"ts-node -r dotenv/config -r newrelic\"",
-    "start:prod": "node -r dotenv/config -r newrelic dist/main",
+    "start": "nest start -e \"ts-node -r dotenv/config\"",
+    "start:debug": "nest start --debug --watch -e \"ts-node -r dotenv/config\"",
+    "start:dev": "nest start --watch -e \"ts-node -r dotenv/config\"",
+    "start:prod": "node -r dotenv/config dist/main",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -44,7 +44,6 @@
     "fastify": "3.29.0",
     "fastify-swagger": "5.2.0",
     "joi": "17.6.0",
-    "newrelic": "8.14.0",
     "passport": "0.6.0",
     "passport-jwt": "4.0.0",
     "pino": "8.0.0",
@@ -52,7 +51,8 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "7.2.0",
-    "uuid": "8.3.2"
+    "uuid": "8.3.2",
+    "zod": "3.19.1"
   },
   "devDependencies": {
     "@commitlint/cli": "17.0.2",
