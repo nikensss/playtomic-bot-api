@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Response } from 'express';
 import { FastifyRequest } from 'fastify';
-import { log } from 'src/pino-logger/pino-logger-cls';
+import { log } from 'src/logger/cls';
 
 @Injectable()
 export class RequestLoggerMiddleware implements NestMiddleware {

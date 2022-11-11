@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { AuthModule } from 'src/auth/auth.module';
-import { PinoLoggerModule } from 'src/pino-logger/pino-logger.module';
+import { LoggerModule } from 'src/logger/logger.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
 
@@ -22,7 +22,7 @@ import { RequestLoggerMiddleware } from './middleware/request-logger.middleware'
         NEW_RELIC_LICENSE_KEY: Joi.string(),
       }),
     }),
-    PinoLoggerModule,
+    LoggerModule,
     PrismaModule,
     AuthModule,
   ],

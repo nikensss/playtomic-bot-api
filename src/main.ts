@@ -1,12 +1,12 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { clsProxifyFastifyPlugin } from 'cls-proxify/integration/fastify';
 import { v4 as uuid } from 'uuid';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
-import { PinoLoggerService } from './pino-logger/pino-logger.service';
-import { logger } from './pino-logger/pino-logger-cls';
-import { ValidationPipe } from '@nestjs/common';
+import { logger } from './logger/cls';
+import { LoggerService } from './logger/logger.service';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -16,13 +16,13 @@ async function bootstrap(): Promise<void> {
     }),
     {
       bufferLogs: true,
-      logger: new PinoLoggerService(),
+      logger: new LoggerService(),
     },
   );
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   await app.register(clsProxifyFastifyPlugin, {
-    proxify: ({ id, url }) => logger.child({ reqId: id, url }),
+    proxify: ({ id, url, method }) => logger.child({ reqId: id, url, method }),
   });
 
   const config = new DocumentBuilder()
@@ -34,7 +34,7 @@ async function bootstrap(): Promise<void> {
   const doc = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, doc);
 
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(process.env.PORT || 3000, '0.0.0.0');
 }
 
 const retry = (): void => {
