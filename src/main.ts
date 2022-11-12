@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { clsProxifyFastifyPlugin } from 'cls-proxify/integration/fastify';
+import { FastifyRequest } from 'fastify';
 import { v4 as uuid } from 'uuid';
 import { AppModule } from './app/app.module';
 import { logger } from './logger/cls';
@@ -22,7 +23,7 @@ async function bootstrap(): Promise<void> {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   await app.register(clsProxifyFastifyPlugin, {
-    proxify: ({ id, url, method }) => logger.child({ reqId: id, url, method }),
+    proxify: ({ id, url, method }: FastifyRequest) => logger.child({ reqId: id, url, method }),
   });
 
   const config = new DocumentBuilder()
