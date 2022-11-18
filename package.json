@@ -1,5 +1,5 @@
 {
-  "name": "body-metrics-nest",
+  "name": "playtomic-bot-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -8,8 +8,8 @@
   "scripts": {
     "build": "nest build",
     "prisma:dev:deploy": "prisma migrate deploy",
-    "db:dev:rm": "docker compose rm dev-db -s -f -v",
-    "db:dev:up": "docker compose up dev-db -d",
+    "db:dev:rm": "docker compose rm playtomic-bot-db -s -f -v",
+    "db:dev:up": "docker compose up playtomic-bot-db -d",
     "db:dev:restart": "npm run db:dev:rm && npm run db:dev:up && sleep 1 && npm run prisma:dev:deploy",
     "format": "npm run prettier -- --write",
     "format:check": "npm run prettier -- --check",
