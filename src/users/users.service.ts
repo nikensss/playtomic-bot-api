@@ -39,13 +39,33 @@ export class UsersService {
     }
   }
 
+  async getPreferredClubs(user: User): Promise<PreferredClub['clubId'][]> {
+    const preferredClubs = await this.db.preferredClub.findMany({
+      where: { userId: user.id },
+      select: { clubId: true },
+    });
+
+    return preferredClubs.map(e => e.clubId);
+  }
+
   async addPreferredClub(user: User, clubId: string): Promise<PreferredClub> {
+    const preferredClub = await this.db.preferredClub.findUnique({
+      where: { userId_clubId: { userId: user.id, clubId } },
+    });
+
+    if (preferredClub) return preferredClub;
+
     return await this.db.preferredClub.create({ data: { userId: user.id, clubId } });
   }
 
-  async deletePreferredClub(user: User, clubId: string): Promise<PreferredClub> {
-    return await this.db.preferredClub.delete({
-      where: { userId_clubId: { userId: user.id, clubId } },
-    });
+  async deletePreferredClub(user: User, clubId: string): Promise<PreferredClub | undefined> {
+    try {
+      return await this.db.preferredClub.delete({
+        where: { userId_clubId: { userId: user.id, clubId } },
+      });
+    } catch (ex) {
+      if ('code' in ex && ex.code === 'P2025') return undefined;
+      throw ex;
+    }
   }
 }
