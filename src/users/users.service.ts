@@ -28,10 +28,15 @@ export class UsersService {
     return await this.db.preferredTime.create({ data: { userId: user.id, time } });
   }
 
-  async deletePreferredTime(user: User, time: string): Promise<PreferredTime> {
-    return await this.db.preferredTime.delete({
-      where: { userId_time: { userId: user.id, time } },
-    });
+  async deletePreferredTime(user: User, time: string): Promise<PreferredTime | undefined> {
+    try {
+      return await this.db.preferredTime.delete({
+        where: { userId_time: { userId: user.id, time } },
+      });
+    } catch (ex) {
+      if ('code' in ex && ex.code === 'P2025') return undefined;
+      throw ex;
+    }
   }
 
   async addPreferredClub(user: User, clubId: string): Promise<PreferredClub> {

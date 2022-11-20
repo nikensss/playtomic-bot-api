@@ -15,10 +15,8 @@ export class DbService extends PrismaClient {
   }
 
   async clean(): Promise<void> {
-    await Promise.all([
-      this.user.deleteMany(),
-      this.preferredClub.deleteMany(),
-      this.preferredTime.deleteMany(),
-    ]);
+    await Promise.all([this.preferredClub.deleteMany(), this.preferredTime.deleteMany()]);
+
+    await this.user.deleteMany();
   }
 }
