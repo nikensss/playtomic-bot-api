@@ -36,29 +36,29 @@ describe('AppController (e2e)', () => {
     beforeEach(() => pactum.request.setBearerToken(token));
 
     describe('PreferredTime', () => {
-      const R = '/users/preferred-time';
+      const PATH = '/users/preferred-time';
       describe('POST /users/preferred-time', () => {
         beforeAll(async () => await app.get(DbService).clean());
         afterAll(async () => await app.get(DbService).clean());
 
         it('should not save without token', async () => {
           pactum.request.setBearerToken('');
-          return pactum.spec().post(R).expectStatus(401);
+          return pactum.spec().post(PATH).expectStatus(401);
         });
 
         it('should not save without time', async () => {
-          await pactum.spec().post(R).expectStatus(400);
+          await pactum.spec().post(PATH).expectStatus(400);
         });
 
         it('should not fail with duplicate times', async () => {
           const body = { time: '20:00:00' };
-          await pactum.spec().post(R).withBody(body).expectStatus(201).expectJsonLike(body);
-          return pactum.spec().post(R).withBody(body).expectStatus(201).expectJsonLike(body);
+          await pactum.spec().post(PATH).withBody(body).expectStatus(201).expectJsonLike(body);
+          return pactum.spec().post(PATH).withBody(body).expectStatus(201).expectJsonLike(body);
         });
 
         it('should save the preferred time (Happy Path)', async () => {
           const body = { time: '18:30:00' };
-          return pactum.spec().post(R).withBody(body).expectStatus(201).expectJsonLike(body);
+          return pactum.spec().post(PATH).withBody(body).expectStatus(201).expectJsonLike(body);
         });
       });
 
@@ -68,38 +68,38 @@ describe('AppController (e2e)', () => {
 
         it('should fail without token', async () => {
           pactum.request.setBearerToken('');
-          return pactum.spec().get(R).expectStatus(401);
+          return pactum.spec().get(PATH).expectStatus(401);
         });
 
         it('should get an empty list of times', async () => {
-          return pactum.spec().get(R).expectStatus(200).expectJson([]);
+          return pactum.spec().get(PATH).expectStatus(200).expectJson([]);
         });
 
         it('should get an non-empty list of times', async () => {
           await pactum
             .spec()
-            .post(R)
+            .post(PATH)
             .withBody({ time: '18:00:00' })
             .expectStatus(201)
             .expectJsonLike({ time: '18:00:00' });
 
           await pactum
             .spec()
-            .post(R)
+            .post(PATH)
             .withBody({ time: '18:30:00' })
             .expectStatus(201)
             .expectJsonLike({ time: '18:30:00' });
 
           await pactum
             .spec()
-            .post(R)
+            .post(PATH)
             .withBody({ time: '19:00:00' })
             .expectStatus(201)
             .expectJsonLike({ time: '19:00:00' });
 
           return pactum
             .spec()
-            .get(R)
+            .get(PATH)
             .expectStatus(200)
             .expectJson(['18:00:00', '18:30:00', '19:00:00']);
         });
@@ -111,17 +111,17 @@ describe('AppController (e2e)', () => {
 
         it('should fail without token', async () => {
           pactum.request.setBearerToken('');
-          return pactum.spec().delete(R).expectStatus(401);
+          return pactum.spec().delete(PATH).expectStatus(401);
         });
 
         it('should fail without time', async () => {
-          return pactum.spec().delete(R).expectStatus(400);
+          return pactum.spec().delete(PATH).expectStatus(400);
         });
 
         it('should not fail if time does not exist', async () => {
           return pactum
             .spec()
-            .delete(R)
+            .delete(PATH)
             .withBody({ time: '18:30:00' })
             .expectStatus(200)
             .expectBody('');
@@ -129,9 +129,114 @@ describe('AppController (e2e)', () => {
 
         it('should delete preferred time', async () => {
           const body = { time: '18:30:00' };
-          await pactum.spec().post(R).withBody(body);
+          await pactum.spec().post(PATH).withBody(body);
 
-          return pactum.spec().delete(R).withBody(body).expectStatus(200).expectJsonLike(body);
+          return pactum.spec().delete(PATH).withBody(body).expectStatus(200).expectJsonLike(body);
+        });
+      });
+    });
+
+    describe('PreferredClub', () => {
+      const PATH = '/users/preferred-club';
+      describe('POST /users/preferred-club', () => {
+        beforeAll(async () => await app.get(DbService).clean());
+        afterAll(async () => await app.get(DbService).clean());
+
+        it('should not save without token', async () => {
+          pactum.request.setBearerToken('');
+          return pactum.spec().post(PATH).expectStatus(401);
+        });
+
+        it('should not save without clubId', async () => {
+          await pactum.spec().post(PATH).expectStatus(400);
+        });
+
+        it('should not fail with duplicate clubId', async () => {
+          const body = { clubId: '00000000-0000-0000-0000-000000000000' };
+          await pactum.spec().post(PATH).withBody(body).expectStatus(201).expectJsonLike(body);
+          return pactum.spec().post(PATH).withBody(body).expectStatus(201).expectJsonLike(body);
+        });
+
+        it('should save the preferred club (Happy Path)', async () => {
+          const body = { clubId: '00000000-0000-0000-0000-000000000000' };
+          return pactum.spec().post(PATH).withBody(body).expectStatus(201).expectJsonLike(body);
+        });
+      });
+
+      describe('GET /users/preferred-club', () => {
+        beforeAll(async () => await app.get(DbService).clean());
+        afterAll(async () => await app.get(DbService).clean());
+
+        it('should fail without token', async () => {
+          pactum.request.setBearerToken('');
+          return pactum.spec().get(PATH).expectStatus(401);
+        });
+
+        it('should get an empty list of clubIds', async () => {
+          return pactum.spec().get(PATH).expectStatus(200).expectJson([]);
+        });
+
+        it('should get an non-empty list of clubIds', async () => {
+          await pactum
+            .spec()
+            .post(PATH)
+            .withBody({ clubId: '00000000-0000-0000-0000-000000000000' })
+            .expectStatus(201)
+            .expectJsonLike({ clubId: '00000000-0000-0000-0000-000000000000' });
+
+          await pactum
+            .spec()
+            .post(PATH)
+            .withBody({ clubId: '00000000-0000-0000-0000-000000000001' })
+            .expectStatus(201)
+            .expectJsonLike({ clubId: '00000000-0000-0000-0000-000000000001' });
+
+          await pactum
+            .spec()
+            .post(PATH)
+            .withBody({ clubId: '00000000-0000-0000-0000-000000000002' })
+            .expectStatus(201)
+            .expectJsonLike({ clubId: '00000000-0000-0000-0000-000000000002' });
+
+          return pactum
+            .spec()
+            .get(PATH)
+            .expectStatus(200)
+            .expectJson([
+              '00000000-0000-0000-0000-000000000000',
+              '00000000-0000-0000-0000-000000000001',
+              '00000000-0000-0000-0000-000000000002',
+            ]);
+        });
+      });
+
+      describe('DELETE /users/preferred-club', () => {
+        beforeAll(async () => await app.get(DbService).clean());
+        afterAll(async () => await app.get(DbService).clean());
+
+        it('should fail without token', async () => {
+          pactum.request.setBearerToken('');
+          return pactum.spec().delete(PATH).expectStatus(401);
+        });
+
+        it('should fail without clubId', async () => {
+          return pactum.spec().delete(PATH).expectStatus(400);
+        });
+
+        it('should not fail if clubId does not exist', async () => {
+          return pactum
+            .spec()
+            .delete(PATH)
+            .withBody({ clubId: '00000000-0000-0000-0000-000000000000' })
+            .expectStatus(200)
+            .expectBody('');
+        });
+
+        it('should delete preferred clubId', async () => {
+          const body = { clubId: '00000000-0000-0000-0000-000000000000' };
+          await pactum.spec().post(PATH).withBody(body);
+
+          return pactum.spec().delete(PATH).withBody(body).expectStatus(200).expectJsonLike(body);
         });
       });
     });
