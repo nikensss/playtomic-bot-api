@@ -20,7 +20,7 @@ model User {
   firstName       String
   lastName        String
   userName        String
-  minimumDuration Int
+  minimumDuration Int    @default(0)
 
   PreferredClub PreferredClub[]
   PreferredTime PreferredTime[]
