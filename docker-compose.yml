@@ -10,5 +10,15 @@ services:
       POSTGRES_DB: playtomic-bot-db
     networks:
       - nestapp
+  playtomic-bot-db-test:
+    image: postgres:13
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: playtomic-bot-db-test
+    networks:
+      - nestapp
 networks:
   nestapp:

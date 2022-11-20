@@ -5,6 +5,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { DbModule } from 'src/db/db.module';
 import { LoggerModule } from 'src/logger/logger.module';
 import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RequestLoggerMiddleware } from './middleware/request-logger.middleware'
     LoggerModule,
     DbModule,
     AuthModule,
+    UsersModule,
   ],
 })
 export class AppModule {
