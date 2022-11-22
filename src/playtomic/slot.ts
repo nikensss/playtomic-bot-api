@@ -34,6 +34,13 @@ export class Slot {
     return times.includes(this.getStartTime());
   }
 
+  toJson(): Record<string, unknown> {
+    return {
+      startTime: this.getStartTime(),
+      duration: this.getDuration(),
+    };
+  }
+
   toString(indentationLevel = 0): string {
     const prefix = '\t'.repeat(indentationLevel);
     return `${prefix}${this.getStartTime()} (${this.getDuration()})`;

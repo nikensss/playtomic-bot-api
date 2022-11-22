@@ -68,8 +68,12 @@ export class Court {
     return this.resource.name.trim();
   }
 
+  getType(): Resource['properties']['resource_type'] {
+    return this.resource.properties.resource_type;
+  }
+
   isIndoor(): boolean {
-    return this.resource.properties.resource_type === 'indoor';
+    return this.getType() === 'indoor';
   }
 
   setAvailability(availability: Availability[]): this {
@@ -88,6 +92,14 @@ export class Court {
   keepAvailabilitiesWithSlotsAt(...times: SlotJson['start_time'][]): this {
     const availabilities = this.getAvailability().map(a => a.keepSlotsAt(...times));
     return this.setAvailability(availabilities.filter(a => a.isAvailableAt(...times)));
+  }
+
+  toJson(): Record<string, unknown> {
+    return {
+      name: this.getName(),
+      type: this.getType(),
+      availability: this.getAvailability().map(a => a.toJson()),
+    };
   }
 
   toString(indentationLevel = 0): string {

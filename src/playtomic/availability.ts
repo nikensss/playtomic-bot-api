@@ -47,6 +47,13 @@ export class Availability {
     return this;
   }
 
+  toJson(): Record<string, unknown> {
+    return {
+      startDate: this.getStartDate(),
+      slots: this.getSlots().map(s => s.toJson()),
+    };
+  }
+
   toString(indentationLevel = 0): string {
     const prefix = '\t'.repeat(indentationLevel);
     const slots = this.getSlots().map(s => s.toString(indentationLevel + 1));

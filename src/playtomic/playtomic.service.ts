@@ -37,7 +37,7 @@ export class PlaytomicService {
     const tenant = new Tenant(await this.getTenant(tenant_id));
     tenant.setAvailability(await this.getFullTenantAvailability(tenant_id));
 
-    return tenant.summary(...(await this.usersService.getPreferredTimes(user)));
+    return tenant.toJson(...(await this.usersService.getPreferredTimes(user)));
   }
 
   async getFullTenantAvailability(tenant_id: string): Promise<Availability[]> {

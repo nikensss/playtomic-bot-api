@@ -202,6 +202,13 @@ export class Tenant {
       .map(c => c.keepAvailabilitiesWithSlotsAt(...times));
   }
 
+  toJson(...times: SlotJson['start_time'][]): Record<string, unknown> {
+    return {
+      name: this.getName(),
+      courts: this.getCourtsAvailableAt(...times).map(c => c.toJson()),
+    };
+  }
+
   summary(...times: SlotJson['start_time'][]): string {
     const courts = this.getCourtsAvailableAt(...times);
     const summary = [`${this.getName()}:`, ...courts.map(c => c.toString(1))];
