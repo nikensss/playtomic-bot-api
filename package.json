@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@fastify/static": "6.5.0",
+    "@nestjs/axios": "1.0.0",
     "@nestjs/common": "9.2.0",
     "@nestjs/config": "2.2.0",
     "@nestjs/core": "9.2.0",

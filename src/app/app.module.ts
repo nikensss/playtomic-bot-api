@@ -6,6 +6,7 @@ import { DbModule } from 'src/db/db.module';
 import { LoggerModule } from 'src/logger/logger.module';
 import { RequestLoggerMiddleware } from './middleware/request-logger.middleware';
 import { UsersModule } from 'src/users/users.module';
+import { PlaytomicModule } from 'src/playtomic/playtomic.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from 'src/users/users.module';
     DbModule,
     AuthModule,
     UsersModule,
+    PlaytomicModule,
   ],
 })
 export class AppModule {
