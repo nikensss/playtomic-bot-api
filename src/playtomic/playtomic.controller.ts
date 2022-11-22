@@ -1,4 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { User as DbUser } from '@prisma/client';
+import { User } from 'src/auth/decorators/user.decorator';
+import { JwtGuard } from 'src/auth/guards';
 import { GetTenantsDto } from './dto';
 import { PlaytomicService } from './playtomic.service';
 
@@ -8,6 +11,12 @@ export class PlaytomicController {
 
   @Get('tenants')
   async getTenants(@Query() { tenant }: GetTenantsDto): Promise<unknown> {
-    return await this.playtomicService.getTenants(tenant);
+    return await this.playtomicService.findTenants(tenant);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('availability')
+  async getAvailability(@User() user: DbUser): Promise<unknown> {
+    return await this.playtomicService.getAllTenantsAvailabilityForUser(user);
   }
 }
