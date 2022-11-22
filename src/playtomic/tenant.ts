@@ -165,7 +165,6 @@ export class Tenant {
   private courts: Court[] = [];
 
   constructor(tenantJson: TenantJson) {
-    console.log({ clone });
     this.tenantJson = clone(tenantJson);
     this.courts = this.tenantJson.resources.map(r => new Court(r));
   }

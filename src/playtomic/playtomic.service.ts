@@ -24,13 +24,8 @@ export class PlaytomicService {
   }
 
   async getTenant(tenant_id: string): Promise<TenantJson> {
-    const { data } = await firstValueFrom(
-      this.http.get(`${this.PLAYTOMIC_API}/v1/tenants`, {
-        url: tenant_id,
-      }),
-    );
-
-    return data;
+    const response = this.http.get(`${this.PLAYTOMIC_API}/v1/tenants/${tenant_id}`);
+    return (await firstValueFrom(response)).data;
   }
 
   async getAllTenantsAvailabilityForUser(user: User): Promise<unknown> {
@@ -46,16 +41,16 @@ export class PlaytomicService {
   }
 
   async getFullTenantAvailability(tenant_id: string): Promise<Availability[]> {
-    const availability: Promise<Availability>[] = new Array(15)
+    const availability: Promise<Availability[]>[] = new Array(15)
       .fill(0)
       .map((_, i) => this.getTenantAvailability(tenant_id, dayjs().add(i, 'days')));
 
-    return await Promise.all(availability);
+    return (await Promise.all(availability)).flat();
   }
 
-  async getTenantAvailability(tenant_id: string, day: dayjs.Dayjs): Promise<Availability> {
+  async getTenantAvailability(tenant_id: string, day: dayjs.Dayjs): Promise<Availability[]> {
     const { data } = await firstValueFrom(
-      this.http.get<AvailabilityJson>(`${this.PLAYTOMIC_API}/v1/availability`, {
+      this.http.get<AvailabilityJson[]>(`${this.PLAYTOMIC_API}/v1/availability`, {
         params: {
           tenant_id,
           user_id: 'me',
@@ -66,6 +61,6 @@ export class PlaytomicService {
       }),
     );
 
-    return new Availability(data);
+    return data.map(e => new Availability(e));
   }
 }
