@@ -1,1 +1,1 @@
-export * from './getTenantsDto';
+export * from './getClubsDto';
