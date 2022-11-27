@@ -23,7 +23,7 @@ async function bootstrap(): Promise<void> {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   await app.register(clsProxifyFastifyPlugin, {
-    proxify: ({ id, url, method }: FastifyRequest) => logger.child({ reqId: id, url, method }),
+    proxify: ({ id, method, routerPath }: FastifyRequest) => logger.child({ reqId: id, routerPath, method }),
   });
 
   const config = new DocumentBuilder()
