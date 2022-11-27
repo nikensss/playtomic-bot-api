@@ -20,7 +20,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: unknown): Promise<User> {
     try {
-      if (!isTelegramJwt(payload)) throw new Error('Not a Telegram JWT!');
+      if (!isTelegramJwt(payload)) {
+        this.logger.error({ err: new Error('Not a Telegram JWT'), payload });
+        throw new Error('Not a Telegram JWT');
+      }
 
       const user = {
         telegramId: `${payload.id}`,
