@@ -97,11 +97,7 @@ describe('AppController (e2e)', () => {
             .expectStatus(201)
             .expectJsonLike({ time: '19:00:00' });
 
-          return pactum
-            .spec()
-            .get(PATH)
-            .expectStatus(200)
-            .expectJson(['18:00:00', '18:30:00', '19:00:00']);
+          return pactum.spec().get(PATH).expectStatus(200).expectJson(['18:00:00', '18:30:00', '19:00:00']);
         });
       });
 
@@ -119,12 +115,7 @@ describe('AppController (e2e)', () => {
         });
 
         it('should not fail if time does not exist', async () => {
-          return pactum
-            .spec()
-            .delete(PATH)
-            .withBody({ time: '18:30:00' })
-            .expectStatus(200)
-            .expectBody('');
+          return pactum.spec().delete(PATH).withBody({ time: '18:30:00' }).expectStatus(200).expectBody('');
         });
 
         it('should delete preferred time', async () => {

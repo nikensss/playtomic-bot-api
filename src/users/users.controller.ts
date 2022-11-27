@@ -11,15 +11,13 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @UseGuards(JwtGuard)
-  @Get('preferred-time')
-  async getPreferredTimes(
-    @User() user: DbUser,
-  ): Promise<ReturnType<UsersService['getPreferredTimes']>> {
+  @Get('preferred-times')
+  async getPreferredTimes(@User() user: DbUser): Promise<ReturnType<UsersService['getPreferredTimes']>> {
     return await this.usersService.getPreferredTimes(user);
   }
 
   @UseGuards(JwtGuard)
-  @Post('preferred-time')
+  @Post('preferred-times')
   async addPreferredTime(
     @User() user: DbUser,
     @Body() { time }: PostPreferredTimeDto,
@@ -28,7 +26,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete('preferred-time')
+  @Delete('preferred-times')
   async deletePreferredTime(
     @User() user: DbUser,
     @Body() { time }: DeletePreferredTimeDto,
@@ -37,15 +35,13 @@ export class UsersController {
   }
 
   @UseGuards(JwtGuard)
-  @Get('preferred-club')
-  async getPreferredClubs(
-    @User() user: DbUser,
-  ): Promise<ReturnType<UsersService['getPreferredClubs']>> {
+  @Get('preferred-clubs')
+  async getPreferredClubs(@User() user: DbUser): Promise<ReturnType<UsersService['getPreferredClubs']>> {
     return await this.usersService.getPreferredClubs(user);
   }
 
   @UseGuards(JwtGuard)
-  @Post('preferred-club')
+  @Post('preferred-clubs')
   async addPreferredClub(
     @User() user: DbUser,
     @Body() { clubId }: PostPreferredClubDto,
@@ -54,7 +50,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete('preferred-club')
+  @Delete('preferred-clubs')
   async deletePreferredClub(
     @User() user: DbUser,
     @Body() { clubId }: DeletePreferredClubDto,
