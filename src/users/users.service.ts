@@ -13,6 +13,7 @@ export class UsersService {
     const preferredTimes = await this.db.preferredTime.findMany({
       where: { user },
       select: { time: true },
+      orderBy: { time: 'asc' },
     });
 
     return preferredTimes.map(e => e.time);
