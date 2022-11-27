@@ -51,6 +51,7 @@ export class PlaytomicService {
   async getClubAvailability(clubId: string, day: dayjs.Dayjs): Promise<Availability[]> {
     const { data } = await firstValueFrom(
       this.http.get<AvailabilityJson[]>(`${this.PLAYTOMIC_API}/v1/availability`, {
+        timeout: 15000,
         params: {
           tenant_id: clubId,
           user_id: 'me',
