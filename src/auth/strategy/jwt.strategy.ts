@@ -20,21 +20,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: unknown): Promise<User> {
     try {
-      if (!isTelegramJwt(payload)) throw new UnauthorizedException();
+      if (!isTelegramJwt(payload)) throw new Error('Not a Telegram JWT!');
 
-      const user = await this.db.user.findUnique({
-        where: { telegramId: `${payload.id}` },
-      });
+      const user = {
+        telegramId: `${payload.id}`,
+        firstName: payload.first_name,
+        lastName: payload.last_name,
+        userName: payload.username,
+      };
 
-      if (user) return user;
-
-      return await this.db.user.create({
-        data: {
-          telegramId: `${payload.id}`,
-          firstName: payload.first_name,
-          lastName: payload.last_name,
-          userName: payload.username,
-        },
+      return await this.db.user.upsert({
+        where: { telegramId: user.telegramId },
+        update: user,
+        create: user,
       });
     } catch (ex) {
       this.logger.error({ err: ex });
