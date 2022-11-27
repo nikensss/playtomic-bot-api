@@ -2,9 +2,8 @@ import { z } from 'zod';
 
 const telegramJwtValidator = z.object({
   id: z.number(),
-  is_bot: z.boolean(),
-  first_name: z.string(),
-  last_name: z.string(),
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
   username: z.string(),
   language_code: z.string(),
 });

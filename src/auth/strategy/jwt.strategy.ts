@@ -27,8 +27,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
       const user = {
         telegramId: `${payload.id}`,
-        firstName: payload.first_name,
-        lastName: payload.last_name,
+        firstName: payload.first_name || null,
+        lastName: payload.last_name || null,
         userName: payload.username,
       };
 

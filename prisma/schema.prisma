@@ -16,11 +16,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  telegramId      String @unique
-  firstName       String
-  lastName        String
+  telegramId      String  @unique
+  firstName       String?
+  lastName        String?
   userName        String
-  minimumDuration Int    @default(0)
+  minimumDuration Int     @default(0)
 
   PreferredClub PreferredClub[]
   PreferredTime PreferredTime[]
