@@ -29,6 +29,10 @@ export class Availability {
     return dayjs(this.getStartDate()).format('dddd').toLowerCase();
   }
 
+  isWeekend(): boolean {
+    return ['saturday', 'sunday'].includes(this.getDayName());
+  }
+
   isAvailableAt(...times: SlotJson['start_time'][]): boolean {
     return this.getSlots().some(s => s.startsAt(...times) && s.isLongEnough());
   }

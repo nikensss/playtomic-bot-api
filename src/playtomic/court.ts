@@ -77,7 +77,10 @@ export class Court {
   }
 
   setAvailability(availability: Availability[]): this {
-    this.availability = clone(availability).filter(a => a.getId() === this.getId());
+    this.availability = clone(availability)
+      .filter(a => a.getId() === this.getId())
+      .filter(a => !a.isWeekend());
+
     return this;
   }
 
