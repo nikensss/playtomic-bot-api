@@ -120,17 +120,17 @@ export enum OnboardingStatus {
 }
 
 export interface OpeningHours {
-  SATURDAY: Friday;
-  SUNDAY: Friday;
-  THURSDAY: Friday;
-  TUESDAY: Friday;
-  FRIDAY: Friday;
-  MONDAY: Friday;
-  WEDNESDAY: Friday;
-  HOLIDAYS?: Friday;
+  SATURDAY: OpeningAndClosingTime;
+  SUNDAY: OpeningAndClosingTime;
+  THURSDAY: OpeningAndClosingTime;
+  TUESDAY: OpeningAndClosingTime;
+  FRIDAY: OpeningAndClosingTime;
+  MONDAY: OpeningAndClosingTime;
+  WEDNESDAY: OpeningAndClosingTime;
+  HOLIDAYS?: OpeningAndClosingTime;
 }
 
-export interface Friday {
+export interface OpeningAndClosingTime {
   opening_time: string;
   closing_time: string;
 }
@@ -155,12 +155,6 @@ export enum TenantType {
 }
 
 export class Tenant {
-  public static readonly RELEVANT_TENANTS = {
-    PADEL_CITY: '19dd692d-32d8-4e22-8a25-989a00b2695f',
-    ALLROUND_PADEL: 'cc65e668-bba9-42f6-8629-31c607c1b899',
-    PLAZA_PADEL: '0bd51db2-7d73-4748-952e-2b628e4e7679',
-  } as const;
-
   private tenantJson: TenantJson;
   private courts: Court[] = [];
 
@@ -175,11 +169,6 @@ export class Tenant {
 
   getName(): TenantJson['tenant_name'] {
     return this.tenantJson.tenant_name.trim();
-  }
-
-  isRelevant(): boolean {
-    const relevant_tenant_ids: string[] = Object.values(Tenant.RELEVANT_TENANTS);
-    return relevant_tenant_ids.includes(this.tenantJson.tenant_id);
   }
 
   getCourts(): Court[] {

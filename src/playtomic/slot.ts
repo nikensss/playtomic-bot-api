@@ -23,7 +23,7 @@ export class Slot {
    */
   getStartTime(): SlotJson['start_time'] {
     const [hours, minutes, seconds] = this.slotJson.start_time.split(':');
-    return `${(parseInt(hours) + 1).toString().padStart(2, '0')}:${minutes}:${seconds}`;
+    return `${(parseInt(hours) + 2).toString().padStart(2, '0')}:${minutes}:${seconds}`;
   }
 
   isLongEnough(): boolean {
