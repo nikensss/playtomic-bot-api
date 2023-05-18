@@ -30,30 +30,30 @@ export class PlaytomicService {
 
   async getAllClubsAvailabilityForUser(user: User): Promise<unknown> {
     const preferredClubs = await this.usersService.getPreferredClubs(user);
-    return await Promise.all(preferredClubs.map(t => this.getClubAvailabilityForUser(user, t)));
+    return await Promise.all(preferredClubs.map(c => this.getClubAvailabilityForUser(user, c)));
   }
 
   async getClubAvailabilityForUser(user: User, clubId: string): Promise<unknown> {
     const tenant = new Tenant(await this.getClub(clubId));
-    tenant.setAvailability(await this.getFullClubAvailability(clubId));
+    tenant.setAvailability(await this.getFullClubAvailability(tenant));
 
     return tenant.toJson(...(await this.usersService.getPreferredTimes(user)));
   }
 
-  async getFullClubAvailability(clubId: string): Promise<Availability[]> {
+  async getFullClubAvailability(tenant: Tenant): Promise<Availability[]> {
     const availability: Promise<Availability[]>[] = new Array(15)
       .fill(0)
-      .map((_, i) => this.getClubAvailability(clubId, dayjs().add(i, 'days')));
+      .map((_, i) => this.getClubAvailability(tenant, dayjs().add(i, 'days')));
 
     return (await Promise.all(availability)).flat();
   }
 
-  async getClubAvailability(clubId: string, day: dayjs.Dayjs): Promise<Availability[]> {
+  async getClubAvailability(tenant: Tenant, day: dayjs.Dayjs): Promise<Availability[]> {
     const { data } = await firstValueFrom(
       this.http.get<AvailabilityJson[]>(`${this.PLAYTOMIC_API}/v1/availability`, {
         timeout: 15000,
         params: {
-          tenant_id: clubId,
+          tenant_id: tenant.getId(),
           user_id: 'me',
           sport_id: 'PADEL',
           local_start_min: day.startOf('day').format('YYYY-MM-DDTHH:mm:ss'),
@@ -62,6 +62,6 @@ export class PlaytomicService {
       }),
     );
 
-    return data.map(e => new Availability(e));
+    return data.map(e => new Availability(e, tenant.getTimezone()));
   }
 }

@@ -10,15 +10,21 @@ export interface AvailabilityJson {
 
 export class Availability {
   private availabilityJson: AvailabilityJson;
+  private timezone: string;
   private slots: Slot[];
 
-  constructor(availabilityJson: AvailabilityJson) {
+  constructor(availabilityJson: AvailabilityJson, timezone: string) {
     this.availabilityJson = clone(availabilityJson);
-    this.slots = this.availabilityJson.slots.map(slotJson => new Slot(slotJson));
+    this.timezone = timezone;
+    this.slots = this.availabilityJson.slots.map(slotJson => new Slot(slotJson, this.getStartDate(), timezone));
   }
 
   getId(): AvailabilityJson['resource_id'] {
     return this.availabilityJson.resource_id;
+  }
+
+  getTimezone(): string {
+    return this.timezone;
   }
 
   getStartDate(): AvailabilityJson['start_date'] {

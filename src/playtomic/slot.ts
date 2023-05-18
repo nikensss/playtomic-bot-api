@@ -1,4 +1,10 @@
 import clone from 'clone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export interface SlotJson {
   start_time: string;
@@ -8,22 +14,28 @@ export interface SlotJson {
 
 export class Slot {
   private slotJson: SlotJson;
+  private startDate: Date;
+  private timezone: string;
 
-  constructor(slotJson: SlotJson) {
+  constructor(slotJson: SlotJson, startDate: Date, timezone: string) {
     this.slotJson = clone(slotJson);
+    this.startDate = startDate;
+    this.timezone = timezone;
   }
 
   getDuration(): SlotJson['duration'] {
     return this.slotJson.duration;
   }
 
-  /**
-   * Offset the hour by 1 because it seems for my current timezone, that's
-   * what I need.
-   */
   getStartTime(): SlotJson['start_time'] {
     const [hours, minutes, seconds] = this.slotJson.start_time.split(':');
-    return `${(parseInt(hours) + 2).toString().padStart(2, '0')}:${minutes}:${seconds}`;
+    const startDateTimeUtc = dayjs
+      .utc(this.startDate, 'YYYY-MM-DD')
+      .set('hour', parseInt(hours))
+      .set('minute', parseInt(minutes))
+      .set('second', parseInt(seconds));
+
+    return startDateTimeUtc.tz(this.timezone).format('HH:mm:ss');
   }
 
   isLongEnough(): boolean {

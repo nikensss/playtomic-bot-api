@@ -171,6 +171,10 @@ export class Tenant {
     return this.tenantJson.tenant_name.trim();
   }
 
+  getTimezone(): string {
+    return this.tenantJson.address.timezone;
+  }
+
   getCourts(): Court[] {
     return clone(this.courts);
   }
