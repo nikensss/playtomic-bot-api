@@ -1,5 +1,5 @@
 import clone from 'clone';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
@@ -27,15 +27,12 @@ export class Slot {
     return this.slotJson.duration;
   }
 
-  getStartTime(): SlotJson['start_time'] {
-    const [hours, minutes, seconds] = this.slotJson.start_time.split(':');
-    const startDateTimeUtc = dayjs
-      .utc(this.startDate, 'YYYY-MM-DD')
-      .set('hour', parseInt(hours))
-      .set('minute', parseInt(minutes))
-      .set('second', parseInt(seconds));
+  getUtcStartTime(): Dayjs {
+    return dayjs.utc(`${this.startDate} ${this.slotJson.start_time}`, 'YYYY-MM-DD HH:mm:ss');
+  }
 
-    return startDateTimeUtc.tz(this.timezone).format('HH:mm:ss');
+  getStartTime(): SlotJson['start_time'] {
+    return this.getUtcStartTime().tz(this.timezone).format('HH:mm:ss');
   }
 
   isLongEnough(): boolean {
@@ -46,15 +43,12 @@ export class Slot {
     return times.includes(this.getStartTime());
   }
 
-  toJson(): Record<string, unknown> {
+  toJson(tenantId: string, courtId: string): { startTime: string; duration: number; link: string } {
+    const dateTime = encodeURIComponent(this.getUtcStartTime().format('YYYY-MM-DDTHH:mm'));
     return {
       startTime: this.getStartTime(),
       duration: this.getDuration(),
+      link: `https://playtomic.io/checkout/booking?s=${tenantId}~${courtId}~${dateTime}~${this.getDuration()}`,
     };
-  }
-
-  toString(indentationLevel = 0): string {
-    const prefix = '\t'.repeat(indentationLevel);
-    return `${prefix}${this.getStartTime()} (${this.getDuration()})`;
   }
 }

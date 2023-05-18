@@ -195,17 +195,10 @@ export class Tenant {
       .map(c => c.keepAvailabilitiesWithSlotsAt(...times));
   }
 
-  toJson(...times: SlotJson['start_time'][]): Record<string, unknown> {
+  toJson(...times: SlotJson['start_time'][]): { name: string; courts: ReturnType<Court['toJson']>[] } {
     return {
       name: this.getName(),
-      courts: this.getCourtsAvailableAt(...times).map(c => c.toJson()),
+      courts: this.getCourtsAvailableAt(...times).map(c => c.toJson(this.getId())),
     };
-  }
-
-  summary(...times: SlotJson['start_time'][]): string {
-    const courts = this.getCourtsAvailableAt(...times);
-    const summary = [`${this.getName()}:`, ...courts.map(c => c.toString(1))];
-
-    return summary.length === 1 ? `${this.getName()}: 💩` : summary.join('\n');
   }
 }

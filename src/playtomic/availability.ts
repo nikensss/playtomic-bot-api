@@ -57,16 +57,10 @@ export class Availability {
     return this;
   }
 
-  toJson(): Record<string, unknown> {
+  toJson(tenantId: string, courtId: string): { startDate: Date; slots: ReturnType<Slot['toJson']>[] } {
     return {
       startDate: this.getStartDate(),
-      slots: this.getSlots().map(s => s.toJson()),
+      slots: this.getSlots().map(s => s.toJson(tenantId, courtId)),
     };
-  }
-
-  toString(indentationLevel = 0): string {
-    const prefix = '\t'.repeat(indentationLevel);
-    const slots = this.getSlots().map(s => s.toString(indentationLevel + 1));
-    return `${prefix}${this.getStartDate()}:\n${slots.join('\n')}`;
   }
 }

@@ -97,17 +97,11 @@ export class Court {
     return this.setAvailability(availabilities.filter(a => a.isAvailableAt(...times)));
   }
 
-  toJson(): Record<string, unknown> {
+  toJson(tenantId: string): { name: string; type: string; availability: ReturnType<Availability['toJson']>[] } {
     return {
       name: this.getName(),
       type: this.getType(),
-      availability: this.getAvailability().map(a => a.toJson()),
+      availability: this.getAvailability().map(a => a.toJson(tenantId, this.getId())),
     };
-  }
-
-  toString(indentationLevel = 0): string {
-    const prefix = '\t'.repeat(indentationLevel);
-    const availability = this.getAvailability().map(a => a.toString(indentationLevel + 1));
-    return `${prefix}${this.getName()}:\n${availability.join('\n')}`;
   }
 }
